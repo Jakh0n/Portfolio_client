@@ -1,9 +1,8 @@
 import Link from "next/link";
 
 const FOOTER_LINKS = [
-  { href: "https://github.com", label: "GitHub" },
-  { href: "https://linkedin.com", label: "LinkedIn" },
-  { href: "https://twitter.com", label: "Twitter" },
+  { href: "https://github.com/jakhon37", label: "GitHub" },
+  { href: "https://linkedin.com/in/jakhon-yokubov", label: "LinkedIn" },
 ] as const;
 
 export function Footer() {
