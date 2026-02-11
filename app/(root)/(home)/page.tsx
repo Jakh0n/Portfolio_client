@@ -1,8 +1,8 @@
 import { Marquee } from "@/components/Marquee";
-import { FeaturedWork } from "@/components/FeaturedWork";
 import { Header } from "@/components/Header";
 import { Hero } from "@/components/Hero";
 import { Footer } from "@/components/Footer";
+import { WorkSection } from "@/components/WorkSection";
 
 export default function HomePage() {
   return (
@@ -11,7 +11,7 @@ export default function HomePage() {
       <main className="flex-1">
         <Hero />
         <Marquee />
-        <FeaturedWork />
+        <WorkSection />
       </main>
       <Footer />
     </div>
