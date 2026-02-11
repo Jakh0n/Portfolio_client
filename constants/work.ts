@@ -24,7 +24,7 @@ export const WORK_PROJECTS: WorkProject[] = [
     description:
       "A digital storefront for builders — where every nail, beam, and finish finds its buyer.",
     tags: ["Next.js", "MongoDB", "Tailwind"],
-    href: "/work#dom-stroy",
+    href: "/work/dom-stroy",
     image: "https://images.unsplash.com/photo-1486406146926-c627a92ad1ab?w=800&q=80",
   },
   {
@@ -34,7 +34,7 @@ export const WORK_PROJECTS: WorkProject[] = [
     description:
       "A stage for stories untold. Where culture meets its audience.",
     tags: ["React", "Node.js", "REST API"],
-    href: "/work#uzbekistans-club",
+    href: "/work/uzbekistans-club",
     image: "https://images.unsplash.com/photo-1533174072545-7a4b6ad7a6c3?w=800&q=80",
   },
   {
@@ -44,7 +44,7 @@ export const WORK_PROJECTS: WorkProject[] = [
     description:
       "Healthcare, redesigned for clarity. Where patients find answers before they need a doctor.",
     tags: ["Next.js", "TypeScript"],
-    href: "/work#anatomica",
+    href: "/work/anatomica",
     image: "https://images.unsplash.com/photo-1576091160399-112ba8d25d1d?w=800&q=80",
   },
   {
@@ -54,7 +54,7 @@ export const WORK_PROJECTS: WorkProject[] = [
     description:
       "Your health, in your pocket. Appointments, records, and care — one tap away.",
     tags: ["React Native", "Node.js"],
-    href: "/work#anatomica-app",
+    href: "/work/anatomica-app",
     image: "https://images.unsplash.com/photo-1576091160550-2173dba999ef?w=800&q=80",
   },
   {
@@ -64,7 +64,11 @@ export const WORK_PROJECTS: WorkProject[] = [
     description:
       "Speed is the product. Every order tracked, every minute accounted for.",
     tags: ["Flutter", "Telegram Bot API"],
-    href: "/work#express24",
+    href: "/work/express24",
     image: "https://images.unsplash.com/photo-1526367790999-0150786686a2?w=800&q=80",
   },
 ];
+
+export function getProjectById(id: string): WorkProject | undefined {
+  return WORK_PROJECTS.find((p) => p.id === id);
+}
