@@ -15,7 +15,7 @@ export function Header() {
       <div className="mx-auto flex h-14 max-w-6xl items-center justify-between px-4 sm:px-6">
         <Link
           href="/"
-          className="relative font-semibold tracking-tight text-foreground transition-opacity hover:opacity-90 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-[width] after:duration-200 hover:after:w-full"
+          className="relative font-semibold tracking-tight text-foreground transition-opacity"
         >
           <Logo />
         </Link>
