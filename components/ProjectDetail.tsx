@@ -13,8 +13,8 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
 
   return (
     <article className="min-h-screen min-w-0">
-      <div className="relative mx-auto min-w-0 max-w-4xl px-4 py-12 sm:px-6 sm:py-16">
-        <header className="mb-10">
+      <div className="relative mx-auto min-w-0 max-w-4xl px-4 py-8 sm:px-6 sm:py-12 lg:py-16">
+        <header className="mb-6 sm:mb-10">
           <div className="mb-3 flex items-center gap-2">
             <span
               className="h-2 w-2 rounded-full"
@@ -31,12 +31,12 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
               {project.category}
             </span>
           </div>
-          <h1 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+          <h1 className="text-2xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
             {project.title}
           </h1>
         </header>
 
-        <div className="relative mb-10 aspect-video overflow-hidden rounded-2xl border border-border/50 bg-muted">
+        <div className="relative mb-6 aspect-video overflow-hidden rounded-xl border border-border/50 bg-muted sm:mb-10 sm:rounded-2xl">
           <Image
             src={project.image}
             alt={project.title}
@@ -47,13 +47,13 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
           />
         </div>
 
-        <div className="min-w-0 space-y-6">
-          <p className="max-w-full wrap-break-word text-lg leading-relaxed text-muted-foreground">
+        <div className="min-w-0 space-y-5 sm:space-y-6">
+          <p className="max-w-full wrap-break-word text-base leading-relaxed text-muted-foreground sm:text-lg">
             {project.description}
           </p>
 
           {(project.liveUrl || project.githubUrl) && (
-            <div className="flex flex-wrap gap-3">
+            <div className="flex flex-wrap gap-2 sm:gap-3">
               {project.liveUrl && (
                 <Button asChild variant="outline">
                   <Link

@@ -263,7 +263,7 @@ export function AboutSection({ data }: AboutSectionProps) {
   return (
     <section
       id="about"
-      className="relative overflow-hidden bg-linear-to-b from-muted/20 to-background px-4 py-20 sm:px-6 sm:py-24 lg:py-28"
+      className="relative overflow-hidden bg-linear-to-b from-muted/20 to-background px-4 py-16 sm:px-6 sm:py-24 lg:py-28"
     >
       {/* Background grid */}
       <div
@@ -296,12 +296,12 @@ export function AboutSection({ data }: AboutSectionProps) {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="mb-12"
+          className="mb-8 sm:mb-12"
         >
-          <h1 className="mb-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+          <h1 className="mb-2 text-2xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
             {intro.name}
           </h1>
-          <p className="mb-4 text-lg font-medium text-teal-500 sm:text-xl">
+          <p className="mb-3 text-base font-medium text-teal-500 sm:mb-4 sm:text-xl">
             {intro.role}
           </p>
           <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">

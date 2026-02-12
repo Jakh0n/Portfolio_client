@@ -40,7 +40,7 @@ function WorkCard({
     >
       <Link
         href={`/work/${project.slug}`}
-        className="group relative flex h-full min-h-[280px] flex-col overflow-hidden rounded-2xl border border-border/50 transition-all duration-500 hover:-translate-y-1 hover:border-transparent hover:shadow-2xl"
+        className="group relative flex h-full min-h-[220px] flex-col overflow-hidden rounded-2xl border border-border/50 transition-all duration-500 hover:-translate-y-1 hover:border-transparent hover:shadow-2xl sm:min-h-[260px] lg:min-h-[280px]"
       >
         <Image
           src={project.image}
@@ -198,14 +198,14 @@ export function WorkSection({ projects }: WorkSectionProps) {
       />
 
       <div className="relative mx-auto max-w-6xl">
-        <div className="mb-12 flex flex-col gap-2 border-b border-border/40 pb-6 sm:flex-row sm:items-end sm:justify-between">
-          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+        <div className="mb-8 flex flex-col gap-2 border-b border-border/40 pb-6 sm:mb-12 sm:flex-row sm:items-end sm:justify-between">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
             Recently Finished Works
           </h2>
         </div>
 
         <ul
-          className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4 lg:grid-rows-2 lg:gap-6"
+          className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4 lg:grid-rows-2 lg:gap-6"
           role="list"
         >
           {projects.map((project, index) => (

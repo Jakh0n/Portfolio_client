@@ -54,7 +54,7 @@ export function ServicesSection() {
   return (
     <section
       id="services"
-      className="relative overflow-hidden border-b border-border/40 bg-linear-to-b from-background to-muted/20 px-4 py-20 sm:px-6 sm:py-24 lg:py-28"
+      className="relative overflow-hidden border-b border-border/40 bg-linear-to-b from-background to-muted/20 px-4 py-16 sm:px-6 sm:py-24 lg:py-28"
     >
       <div
         className="pointer-events-none absolute inset-0 opacity-[0.02] dark:opacity-[0.04]"
@@ -76,11 +76,11 @@ export function ServicesSection() {
       />
 
       <div className="relative mx-auto max-w-6xl">
-        <header className="mb-12 border-b border-border/40 pb-6">
-          <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-teal-500">
+        <header className="mb-8 border-b border-border/40 pb-6 sm:mb-12">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-teal-500 sm:text-sm">
             Is there a problem?
           </p>
-          <h2 className="text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+          <h2 className="text-2xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
             What solution do you want?
           </h2>
         </header>

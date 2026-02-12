@@ -27,15 +27,15 @@ export function Hero() {
         aria-hidden
       />
 
-      <div className="relative mx-auto max-w-3xl px-4 py-20 text-center sm:px-6 sm:py-28 md:py-36">
+      <div className="relative mx-auto max-w-3xl px-4 py-16 text-center sm:px-6 sm:py-28 md:py-36">
         <p
-          className="mb-4 text-sm font-medium uppercase tracking-widest text-muted-foreground animate-[fade-in-up_0.6s_ease-out_both]"
+          className="mb-3 text-xs font-medium uppercase tracking-widest text-muted-foreground sm:mb-4 sm:text-sm animate-[fade-in-up_0.6s_ease-out_both]"
           style={{ animationDelay: "0.1s" }}
         >
           Jakhon Yokubov · Full Stack & Mobile Developer
         </p>
         <h1
-          className="mb-4 text-3xl font-bold leading-tight tracking-tight text-foreground sm:text-4xl md:text-5xl animate-[fade-in-up_0.6s_ease-out_both]"
+          className="mb-3 text-2xl font-bold leading-tight tracking-tight text-foreground sm:mb-4 sm:text-4xl md:text-5xl animate-[fade-in-up_0.6s_ease-out_both]"
           style={{ animationDelay: "0.2s" }}
         >
           Ideas are fragile things.
@@ -54,7 +54,7 @@ export function Hero() {
           on.
         </p>
         <div
-          className="flex flex-wrap items-center justify-center gap-3 animate-[fade-in-up_0.6s_ease-out_both]"
+          className="flex flex-wrap items-center justify-center gap-2 sm:gap-3 animate-[fade-in-up_0.6s_ease-out_both]"
           style={{ animationDelay: "0.5s" }}
         >
           <Button asChild size="lg" className="shadow-lg shadow-primary/20">
@@ -65,7 +65,7 @@ export function Hero() {
           </Button>
         </div>
         <div
-          className="mt-14 flex justify-center animate-[fade-in-up_0.6s_ease-out_both]"
+          className="mt-10 flex justify-center sm:mt-14 animate-[fade-in-up_0.6s_ease-out_both]"
           style={{ animationDelay: "0.6s" }}
         >
           <span className="flex h-10 w-6 items-start justify-center rounded-full border-2 border-muted-foreground/30">

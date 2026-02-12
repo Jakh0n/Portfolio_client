@@ -35,7 +35,7 @@ export function ContactSection() {
   return (
     <section
       id="contact"
-      className="relative overflow-hidden bg-linear-to-b from-muted/20 to-background px-4 py-20 sm:px-6 sm:py-24 lg:py-28"
+      className="relative overflow-hidden bg-linear-to-b from-muted/20 to-background px-4 py-16 sm:px-6 sm:py-24 lg:py-28"
     >
       {/* Background grid */}
       <div
@@ -56,6 +56,11 @@ export function ContactSection() {
         className="pointer-events-none absolute -right-32 top-2/3 h-96 w-96 rounded-full bg-chart-3 opacity-15 blur-[120px] animate-[blob-float_18s_ease-in-out_infinite_reverse]"
         aria-hidden
       />
+      {/* Green blur behind form */}
+      <div
+        className="pointer-events-none absolute left-1/4 top-1/2 h-80 w-80 -translate-x-1/2 -translate-y-1/2 rounded-full bg-teal-500/25 blur-[100px] lg:left-1/3"
+        aria-hidden
+      />
 
       <div className="relative mx-auto max-w-5xl">
         {/* Header */}
@@ -64,12 +69,12 @@ export function ContactSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.6, ease: "easeOut" }}
-          className="mb-12 max-w-xl"
+          className="mb-8 max-w-xl sm:mb-12"
         >
-          <p className="mb-2 text-sm font-semibold uppercase tracking-widest text-teal-500">
+          <p className="mb-2 text-xs font-semibold uppercase tracking-widest text-teal-500 sm:text-sm">
             Get in touch
           </p>
-          <h1 className="mb-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+          <h1 className="mb-3 text-2xl font-bold tracking-tight text-foreground sm:mb-4 sm:text-4xl lg:text-5xl">
             Let&apos;s work together.
           </h1>
           <p className="text-base leading-relaxed text-muted-foreground sm:text-lg">
@@ -78,17 +83,25 @@ export function ContactSection() {
           </p>
         </motion.div>
 
-        <div className="grid grid-cols-1 gap-8 lg:grid-cols-3 lg:gap-12">
+        <div className="grid grid-cols-1 gap-6 lg:grid-cols-3 lg:gap-12">
           {/* Form */}
           <motion.div
             initial={{ opacity: 0, y: 24 }}
             whileInView={{ opacity: 1, y: 0 }}
             viewport={{ once: true }}
             transition={{ delay: 0.1, duration: 0.6, ease: "easeOut" }}
-            className="lg:col-span-2"
+            className="group relative lg:col-span-2"
           >
+            {/* Green glow on hover */}
+            <div
+              className="pointer-events-none absolute -inset-1 rounded-xl opacity-0 blur-2xl transition-opacity duration-300 group-hover:opacity-100"
+              style={{
+                boxShadow: "0 0 80px 50px rgba(20, 184, 166, 0.18)",
+              }}
+              aria-hidden
+            />
             {isSubmitted ? (
-              <Card className="border-teal-500/20 bg-card/80 backdrop-blur-sm">
+              <Card className="relative border-teal-500/20 bg-card/80 backdrop-blur-sm">
                 <CardContent className="flex flex-col items-center justify-center p-12 text-center">
                   <CheckCircle2 className="mb-4 h-12 w-12 text-teal-500" />
                   <h3 className="mb-2 text-xl font-bold text-foreground">
@@ -101,9 +114,9 @@ export function ContactSection() {
                 </CardContent>
               </Card>
             ) : (
-              <Card className="border-border/60 bg-card/80 backdrop-blur-sm">
-                <CardContent className="p-6 sm:p-8">
-                  <form onSubmit={handleSubmit} className="space-y-6">
+              <Card className="relative border-border/60 bg-card/80 backdrop-blur-sm transition-shadow duration-300 group-hover:border-teal-500/30 group-hover:shadow-[0_0_40px_20px_rgba(20,184,166,0.08)]">
+                <CardContent className="p-4 sm:p-8">
+                  <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
                     {/* Name & Email */}
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <div className="space-y-2">
@@ -144,7 +157,7 @@ export function ContactSection() {
                             type="button"
                             onClick={() => setSelectedService(service.id)}
                             className={cn(
-                              "rounded-lg border px-3 py-2.5 text-left text-sm font-medium transition-all duration-200",
+                              "min-h-[44px] rounded-lg border px-3 py-2.5 text-left text-sm font-medium transition-all duration-200",
                               selectedService === service.id
                                 ? "border-teal-500 bg-teal-500/10 text-teal-500"
                                 : "border-border/60 text-muted-foreground hover:border-border hover:text-foreground"
