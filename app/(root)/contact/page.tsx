@@ -1,11 +1,15 @@
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ContactSection } from "@/components/ContactSection";
+import { createPageMetadata } from "@/lib/metadata";
 
 export const metadata = {
-  title: "Contact | Jakhon Yokubov",
-  description:
-    "Get in touch to discuss your project. Full-stack and mobile development services.",
+  ...createPageMetadata({
+    title: "Contact",
+    description:
+      "Get in touch to discuss your project. Full-stack and mobile development services.",
+    pathname: "/contact",
+  }),
 };
 
 export default function ContactPage() {

@@ -26,4 +26,6 @@ export interface WorkProject {
   githubUrl?: string;
   featured: boolean;
   order: number;
+  createdAt?: string;
+  updatedAt?: string;
 }

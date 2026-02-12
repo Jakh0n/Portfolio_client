@@ -3,6 +3,7 @@ import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ProjectDetail } from "@/components/ProjectDetail";
 import { getProjectBySlug } from "@/lib/projects";
+import { createPageMetadata } from "@/lib/metadata";
 
 interface ProjectPageProps {
   params: Promise<{ id: string }>;
@@ -30,9 +31,19 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 export async function generateMetadata({ params }: ProjectPageProps) {
   const { id } = await params;
   const project = await getProjectBySlug(id);
-  if (!project) return { title: "Project not found" };
-  return {
-    title: `${project.title} | Work`,
+  if (!project) {
+    return createPageMetadata({
+      title: "Project not found",
+      description: "The requested project could not be found.",
+      pathname: `/work/${id}`,
+      noIndex: true,
+    });
+  }
+
+  return createPageMetadata({
+    title: project.title,
     description: project.description,
-  };
+    pathname: `/work/${project.slug}`,
+    image: project.image,
+  });
 }
