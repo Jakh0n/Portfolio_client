@@ -11,20 +11,6 @@ import { Label } from "@/components/ui/label";
 import { cn } from "@/lib/utils";
 import type { ProjectCategory } from "@/models/Project";
 
-/**
- * Reusable Project Form
- * ─────────────────────
- * Used by both "Create" and "Edit" pages.
- *
- * - mode="create" → POST /api/projects
- * - mode="edit"   → PATCH /api/projects/:id
- *
- * Why reusable?
- * Create and Edit forms have the SAME fields.
- * Only the API method and initial values differ.
- * DRY = Don't Repeat Yourself.
- */
-
 const CATEGORIES: ProjectCategory[] = ["WEBSITE", "MOBILE APP", "TELEGRAM BOT"];
 
 interface ProjectFormData {
@@ -46,12 +32,17 @@ interface ProjectFormProps {
   initialData?: Partial<ProjectFormData>;
 }
 
-export function ProjectForm({ mode, projectId, initialData }: ProjectFormProps) {
+export function ProjectForm({
+  mode,
+  projectId,
+  initialData,
+}: ProjectFormProps) {
   const router = useRouter();
   const fileInputRef = useRef<HTMLInputElement>(null);
   const [isLoading, setIsLoading] = useState(false);
   const [isUploading, setIsUploading] = useState(false);
   const [isDragging, setIsDragging] = useState(false);
+  const [imageError, setImageError] = useState(false);
   const [error, setError] = useState("");
 
   const [form, setForm] = useState<ProjectFormData>({
@@ -67,12 +58,10 @@ export function ProjectForm({ mode, projectId, initialData }: ProjectFormProps) 
     order: initialData?.order ?? 0,
   });
 
-  /** Auto-generate slug from title */
   function handleTitleChange(title: string) {
     setForm((prev) => ({
       ...prev,
       title,
-      // Only auto-slug in create mode (don't overwrite existing slug on edit)
       slug:
         mode === "create"
           ? title
@@ -85,29 +74,23 @@ export function ProjectForm({ mode, projectId, initialData }: ProjectFormProps) 
     }));
   }
 
-  /** Upload image file to Cloudinary via our API */
   async function uploadImage(file: File) {
     setIsUploading(true);
     setError("");
-
     try {
       const formData = new FormData();
       formData.append("file", file);
-
       const response = await fetch("/api/upload", {
         method: "POST",
         body: formData,
       });
-
       const data = await response.json();
-
       if (!response.ok) {
         setError(data.error || "Upload failed");
         return;
       }
-
-      // Set the returned URL as the image
       setForm((prev) => ({ ...prev, image: data.url }));
+      setImageError(false);
     } catch {
       setError("Failed to upload image. Please try again.");
     } finally {
@@ -138,6 +121,7 @@ export function ProjectForm({ mode, projectId, initialData }: ProjectFormProps) 
 
   function removeImage() {
     setForm((prev) => ({ ...prev, image: "" }));
+    setImageError(false);
     if (fileInputRef.current) fileInputRef.current.value = "";
   }
 
@@ -145,15 +129,10 @@ export function ProjectForm({ mode, projectId, initialData }: ProjectFormProps) 
     e.preventDefault();
     setError("");
     setIsLoading(true);
-
     try {
       const url =
-        mode === "create"
-          ? "/api/projects"
-          : `/api/projects/${projectId}`;
-
+        mode === "create" ? "/api/projects" : `/api/projects/${projectId}`;
       const method = mode === "create" ? "POST" : "PATCH";
-
       const body = {
         ...form,
         tags: form.tags
@@ -162,21 +141,16 @@ export function ProjectForm({ mode, projectId, initialData }: ProjectFormProps) 
           .filter(Boolean),
         order: Number(form.order),
       };
-
       const response = await fetch(url, {
         method,
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify(body),
       });
-
       const data = await response.json();
-
       if (!response.ok) {
         setError(data.error || "Something went wrong");
         return;
       }
-
-      // Success — go back to projects list
       router.push("/admin/projects");
       router.refresh();
     } catch {
@@ -196,7 +170,6 @@ export function ProjectForm({ mode, projectId, initialData }: ProjectFormProps) 
             </div>
           )}
 
-          {/* Title + Slug */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="title">
@@ -229,7 +202,6 @@ export function ProjectForm({ mode, projectId, initialData }: ProjectFormProps) 
             </div>
           </div>
 
-          {/* Category */}
           <div className="space-y-2">
             <Label>
               Category <span className="text-destructive">*</span>
@@ -246,7 +218,7 @@ export function ProjectForm({ mode, projectId, initialData }: ProjectFormProps) 
                     "rounded-lg border px-4 py-2 text-sm font-medium transition-colors",
                     form.category === cat
                       ? "border-primary bg-primary/10 text-primary"
-                      : "border-border/60 text-muted-foreground hover:border-border hover:text-foreground"
+                      : "border-border/60 text-muted-foreground hover:border-border hover:text-foreground",
                   )}
                 >
                   {cat}
@@ -255,7 +227,6 @@ export function ProjectForm({ mode, projectId, initialData }: ProjectFormProps) 
             </div>
           </div>
 
-          {/* Description */}
           <div className="space-y-2">
             <Label htmlFor="description">
               Description <span className="text-destructive">*</span>
@@ -272,7 +243,6 @@ export function ProjectForm({ mode, projectId, initialData }: ProjectFormProps) 
             />
           </div>
 
-          {/* Tags */}
           <div className="space-y-2">
             <Label htmlFor="tags">Tags</Label>
             <Input
@@ -285,21 +255,31 @@ export function ProjectForm({ mode, projectId, initialData }: ProjectFormProps) 
             />
           </div>
 
-          {/* Cover Image */}
           <div className="space-y-2">
             <Label>
               Cover Image <span className="text-destructive">*</span>
             </Label>
-
             {form.image ? (
-              /* ── Image preview ── */
-              <div className="relative overflow-hidden rounded-lg border border-border/60">
-                {/* eslint-disable-next-line @next/next/no-img-element */}
-                <img
-                  src={form.image}
-                  alt="Preview"
-                  className="h-48 w-full object-cover"
-                />
+              <div className="relative w-full">
+                <div className="relative aspect-video w-full overflow-hidden rounded-lg border border-border/60 bg-muted">
+                  {imageError ? (
+                    <div className="flex min-h-[200px] flex-col items-center justify-center gap-2 p-4 text-center text-sm text-muted-foreground">
+                      <p>Image could not be loaded.</p>
+                      <p className="text-xs">
+                        Check the URL or try uploading again.
+                      </p>
+                    </div>
+                  ) : (
+                    /* eslint-disable-next-line @next/next/no-img-element */
+                    <img
+                      src={form.image}
+                      alt="Cover preview"
+                      className="h-full w-full object-cover object-center"
+                      onLoad={() => setImageError(false)}
+                      onError={() => setImageError(true)}
+                    />
+                  )}
+                </div>
                 <button
                   type="button"
                   onClick={removeImage}
@@ -310,7 +290,6 @@ export function ProjectForm({ mode, projectId, initialData }: ProjectFormProps) 
                 </button>
               </div>
             ) : (
-              /* ── Upload area (click or drag & drop) ── */
               <div
                 onDrop={handleDrop}
                 onDragOver={handleDragOver}
@@ -321,7 +300,7 @@ export function ProjectForm({ mode, projectId, initialData }: ProjectFormProps) 
                   isDragging
                     ? "border-primary bg-primary/5"
                     : "border-border/60 hover:border-border hover:bg-muted/30",
-                  isUploading && "pointer-events-none opacity-60"
+                  isUploading && "pointer-events-none opacity-60",
                 )}
               >
                 {isUploading ? (
@@ -344,8 +323,6 @@ export function ProjectForm({ mode, projectId, initialData }: ProjectFormProps) 
                 )}
               </div>
             )}
-
-            {/* Hidden file input */}
             <input
               ref={fileInputRef}
               type="file"
@@ -353,24 +330,22 @@ export function ProjectForm({ mode, projectId, initialData }: ProjectFormProps) 
               className="hidden"
               onChange={(e) => handleFileSelect(e.target.files)}
             />
-
-            {/* Or paste a URL */}
             <div className="flex items-center gap-2 pt-1">
               <span className="text-xs text-muted-foreground">
                 Or paste image URL:
               </span>
               <Input
                 value={form.image}
-                onChange={(e) =>
-                  setForm((prev) => ({ ...prev, image: e.target.value }))
-                }
+                onChange={(e) => {
+                  setForm((prev) => ({ ...prev, image: e.target.value }));
+                  setImageError(false);
+                }}
                 placeholder="https://..."
                 className="h-8 text-xs"
               />
             </div>
           </div>
 
-          {/* URLs */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="liveUrl">Live URL</Label>
@@ -396,7 +371,6 @@ export function ProjectForm({ mode, projectId, initialData }: ProjectFormProps) 
             </div>
           </div>
 
-          {/* Order + Featured */}
           <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
             <div className="space-y-2">
               <Label htmlFor="order">Display Order</Label>
@@ -432,7 +406,6 @@ export function ProjectForm({ mode, projectId, initialData }: ProjectFormProps) 
             </div>
           </div>
 
-          {/* Submit */}
           <div className="flex items-center gap-3 border-t border-border/40 pt-6">
             <Button type="submit" disabled={isLoading}>
               {isLoading

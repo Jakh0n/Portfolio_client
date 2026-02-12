@@ -62,7 +62,6 @@ const ProjectSchema = new Schema<IProjectDocument>(
     description: {
       type: String,
       required: [true, "Description is required"],
-      maxlength: [500, "Description cannot exceed 500 characters"],
     },
     tags: {
       type: [String],

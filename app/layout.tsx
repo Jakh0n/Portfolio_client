@@ -34,6 +34,10 @@ export const metadata: Metadata = {
   title: "Jakhon Yokubov | Full Stack & Mobile Developer",
   description:
     "Full stack and mobile developer—web apps, native apps, and APIs with clean code and thoughtful design.",
+  icons: {
+    icon: "/J.jpeg",
+    apple: "/J.jpeg",
+  },
 };
 
 export default function RootLayout({ children }: ChildProps) {

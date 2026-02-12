@@ -5,13 +5,6 @@ import { usePathname, useRouter } from "next/navigation";
 import { FolderOpen, LayoutDashboard, LogOut, UserCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
-/**
- * Admin Sidebar
- * ─────────────
- * Navigation for the admin panel.
- * Highlights the current page. Handles logout.
- */
-
 const ADMIN_NAV = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/projects", label: "Projects", icon: FolderOpen },
@@ -33,15 +26,13 @@ export function AdminSidebar({ adminEmail }: AdminSidebarProps) {
   }
 
   return (
-    <aside className="flex w-60 flex-col border-r border-border/50 bg-card/50">
-      {/* Logo area */}
+    <aside className="flex w-60 shrink-0 flex-col border-r border-border/50 bg-card/50">
       <div className="flex h-14 items-center border-b border-border/50 px-5">
         <Link href="/admin" className="text-lg font-bold tracking-tight">
           Admin
         </Link>
       </div>
 
-      {/* Navigation */}
       <nav className="flex-1 space-y-1 px-3 py-4">
         {ADMIN_NAV.map((item) => {
           const isActive =
@@ -67,7 +58,6 @@ export function AdminSidebar({ adminEmail }: AdminSidebarProps) {
         })}
       </nav>
 
-      {/* Footer — admin email + logout */}
       <div className="border-t border-border/50 p-3">
         <p className="mb-2 truncate px-3 text-xs text-muted-foreground">
           {adminEmail}
