@@ -3,6 +3,7 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
+import { cn } from "@/lib/utils";
 import { WORK_ACCENT, type WorkProject } from "@/constants/work";
 
 /**
@@ -36,11 +37,18 @@ function WorkCard({
         duration: 0.6,
         ease: "easeOut",
       }}
-      className={size === "large" ? "col-span-2 row-span-2" : ""}
+      className={
+        size === "large"
+          ? "col-span-2 lg:row-span-2"
+          : ""
+      }
     >
       <Link
         href={`/work/${project.slug}`}
-        className="group relative flex h-full min-h-[220px] flex-col overflow-hidden rounded-2xl border border-border/50 transition-all duration-500 hover:-translate-y-1 hover:border-transparent hover:shadow-2xl sm:min-h-[260px] lg:min-h-[280px]"
+        className={cn(
+          "group relative flex h-full min-h-[200px] flex-col overflow-hidden rounded-2xl border border-border/50 transition-all duration-500 hover:-translate-y-1 hover:border-transparent hover:shadow-2xl sm:min-h-[240px] lg:min-h-[280px]",
+          size === "large" && "min-h-[260px] sm:min-h-[300px] lg:min-h-[280px]",
+        )}
       >
         <Image
           src={project.image}
@@ -205,7 +213,7 @@ export function WorkSection({ projects }: WorkSectionProps) {
         </div>
 
         <ul
-          className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4 lg:grid-rows-2 lg:gap-6"
+          className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4 lg:grid-rows-2 lg:gap-6"
           role="list"
         >
           {projects.map((project, index) => (

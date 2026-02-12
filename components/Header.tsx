@@ -62,7 +62,7 @@ export function Header() {
             <SheetTrigger asChild>
               <button
                 type="button"
-                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent/50 hover:text-foreground md:hidden"
+                className="flex h-10 w-10 shrink-0 items-center justify-center rounded-md text-muted-foreground transition-colors hover:bg-accent/50 hover:text-foreground md:hidden cursor-pointer"
                 aria-expanded={mobileOpen}
                 aria-label="Open menu"
               >
