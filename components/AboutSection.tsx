@@ -15,20 +15,13 @@ import {
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Card, CardContent } from "@/components/ui/card";
-import {
-  ABOUT,
-  EXPERIENCE,
-  PROJECTS,
-  TECH_STACK,
-  EDUCATION,
-  LANGUAGES,
-  STATS,
-  type ExperienceItem,
-  type ProjectItem,
-  type StackItem,
-  type LanguageItem,
-} from "@/constants/about";
 import { cn } from "@/lib/utils";
+import type { AboutData } from "@/lib/about";
+
+type ExperienceItem = AboutData["experience"][number];
+type ProjectItem = AboutData["projects"][number];
+type StackItem = AboutData["techStack"][number];
+type LanguageItem = AboutData["languages"][number];
 
 const ACCENT = { bg: "bg-teal-500/10", text: "text-teal-500" } as const;
 
@@ -236,7 +229,37 @@ function LanguagePill({ item, index }: { item: LanguageItem; index: number }) {
 }
 
 /* ─── Main section ─── */
-export function AboutSection() {
+interface AboutSectionProps {
+  data: AboutData | null;
+}
+
+export function AboutSection({ data }: AboutSectionProps) {
+  if (!data) {
+    return (
+      <section
+        id="about"
+        className="relative overflow-hidden bg-linear-to-b from-muted/20 to-background px-4 py-20 sm:px-6 sm:py-24"
+      >
+        <div className="relative mx-auto max-w-4xl text-center">
+          <h1 className="mb-2 text-3xl font-bold tracking-tight text-foreground">
+            About
+          </h1>
+          <p className="text-muted-foreground">
+            About content is not set up yet. Add it from the admin panel.
+          </p>
+        </div>
+      </section>
+    );
+  }
+
+  const intro = data.intro ?? {};
+  const stats = data.stats ?? [];
+  const experience = data.experience ?? [];
+  const projects = data.projects ?? [];
+  const education = data.education ?? {};
+  const techStack = data.techStack ?? [];
+  const languages = data.languages ?? [];
+
   return (
     <section
       id="about"
@@ -276,124 +299,150 @@ export function AboutSection() {
           className="mb-12"
         >
           <h1 className="mb-2 text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
-            {ABOUT.name}
+            {intro.name}
           </h1>
           <p className="mb-4 text-lg font-medium text-teal-500 sm:text-xl">
-            {ABOUT.role}
+            {intro.role}
           </p>
           <div className="mb-6 flex flex-wrap items-center gap-x-4 gap-y-2 text-sm text-muted-foreground">
-            <span className="flex items-center gap-1.5">
-              <MapPin className="h-3.5 w-3.5" />
-              {ABOUT.location}
-            </span>
-            <span className="flex items-center gap-1.5">
-              <Mail className="h-3.5 w-3.5" />
-              {ABOUT.email}
-            </span>
-            <Link
-              href="https://github.com/Jakh0n"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-full border border-teal-500/30 bg-teal-500/5 px-3 py-1 text-sm font-medium text-teal-500 transition-colors hover:bg-teal-500/10 hover:border-teal-500/50"
-            >
-              <Github className="h-3.5 w-3.5" />
-              GitHub
-            </Link>
-            <Link
-              href="https://www.linkedin.com/in/jakhon-yokubov/"
-              target="_blank"
-              rel="noopener noreferrer"
-              className="inline-flex items-center gap-1.5 rounded-full border border-teal-500/30 bg-teal-500/5 px-3 py-1 text-sm font-medium text-teal-500 transition-colors hover:bg-teal-500/10 hover:border-teal-500/50"
-            >
-              <Linkedin className="h-3.5 w-3.5" />
-              LinkedIn
-            </Link>
+            {intro.location && (
+              <span className="flex items-center gap-1.5">
+                <MapPin className="h-3.5 w-3.5" />
+                {intro.location}
+              </span>
+            )}
+            {intro.email && (
+              <span className="flex items-center gap-1.5">
+                <Mail className="h-3.5 w-3.5" />
+                {intro.email}
+              </span>
+            )}
+            {intro.githubUrl && (
+              <Link
+                href={intro.githubUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 rounded-full border border-teal-500/30 bg-teal-500/5 px-3 py-1 text-sm font-medium text-teal-500 transition-colors hover:bg-teal-500/10 hover:border-teal-500/50"
+              >
+                <Github className="h-3.5 w-3.5" />
+                GitHub
+              </Link>
+            )}
+            {intro.linkedinUrl && (
+              <Link
+                href={intro.linkedinUrl}
+                target="_blank"
+                rel="noopener noreferrer"
+                className="inline-flex items-center gap-1.5 rounded-full border border-teal-500/30 bg-teal-500/5 px-3 py-1 text-sm font-medium text-teal-500 transition-colors hover:bg-teal-500/10 hover:border-teal-500/50"
+              >
+                <Linkedin className="h-3.5 w-3.5" />
+                LinkedIn
+              </Link>
+            )}
           </div>
-          <p className="max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
-            {ABOUT.summary}
-          </p>
+          {intro.summary && (
+            <p className="max-w-2xl text-base leading-relaxed text-muted-foreground sm:text-lg">
+              {intro.summary}
+            </p>
+          )}
         </motion.div>
 
         {/* ── Stats ── */}
-        <div className="mb-14">
-          <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-5">
-            {STATS.map((stat, i) => (
-              <StatCard
-                key={stat.label}
-                value={stat.value}
-                label={stat.label}
-                index={i}
-              />
-            ))}
+        {stats.length > 0 && (
+          <div className="mb-14">
+            <div className="grid grid-cols-2 gap-4 sm:grid-cols-4 sm:gap-5">
+              {stats.map((stat, i) => (
+                <StatCard
+                  key={stat.label}
+                  value={stat.value}
+                  label={stat.label}
+                  index={i}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* ── Experience ── */}
-        <div className="mb-14">
-          <SectionHeading icon={Briefcase} title="Experience" index={0} />
-          <div className="space-y-4">
-            {EXPERIENCE.map((item, i) => (
-              <ExperienceCard key={item.company} item={item} index={i} />
-            ))}
+        {experience.length > 0 && (
+          <div className="mb-14">
+            <SectionHeading icon={Briefcase} title="Experience" index={0} />
+            <div className="space-y-4">
+              {experience.map((item, i) => (
+                <ExperienceCard key={`${item.company}-${i}`} item={item} index={i} />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* ── Projects ── */}
-        <div className="mb-14">
-          <SectionHeading icon={FolderOpen} title="Projects" index={1} />
-          <div className="space-y-4">
-            {PROJECTS.map((item, i) => (
-              <ProjectCard key={item.title} item={item} index={i} />
-            ))}
+        {projects.length > 0 && (
+          <div className="mb-14">
+            <SectionHeading icon={FolderOpen} title="Projects" index={1} />
+            <div className="space-y-4">
+              {projects.map((item, i) => (
+                <ProjectCard key={`${item.title}-${i}`} item={item} index={i} />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* ── Education ── */}
-        <div className="mb-14">
-          <SectionHeading icon={GraduationCap} title="Education" index={2} />
-          <motion.div
-            initial={{ opacity: 0, y: 16 }}
-            whileInView={{ opacity: 1, y: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.5, ease: "easeOut" }}
-          >
-            <Card className="border-border/60 bg-card/80 backdrop-blur-sm transition-all duration-300 hover:border-teal-500/20 hover:shadow-lg hover:shadow-teal-500/5">
-              <CardContent className="p-5 sm:p-6">
-                <div className="flex flex-col justify-between gap-1 sm:flex-row sm:items-center">
-                  <h3 className="text-lg font-bold tracking-tight text-foreground">
-                    {EDUCATION.school}
-                  </h3>
-                  <span className="shrink-0 rounded-full bg-teal-500/10 px-2.5 py-0.5 text-xs font-medium text-teal-500">
-                    {EDUCATION.period}
-                  </span>
-                </div>
-                <p className="mt-1 text-sm font-medium text-teal-500">
-                  {EDUCATION.degree}
-                </p>
-              </CardContent>
-            </Card>
-          </motion.div>
-        </div>
+        {(education.school || education.degree) && (
+          <div className="mb-14">
+            <SectionHeading icon={GraduationCap} title="Education" index={2} />
+            <motion.div
+              initial={{ opacity: 0, y: 16 }}
+              whileInView={{ opacity: 1, y: 0 }}
+              viewport={{ once: true }}
+              transition={{ duration: 0.5, ease: "easeOut" }}
+            >
+              <Card className="border-border/60 bg-card/80 backdrop-blur-sm transition-all duration-300 hover:border-teal-500/20 hover:shadow-lg hover:shadow-teal-500/5">
+                <CardContent className="p-5 sm:p-6">
+                  <div className="flex flex-col justify-between gap-1 sm:flex-row sm:items-center">
+                    <h3 className="text-lg font-bold tracking-tight text-foreground">
+                      {education.school}
+                    </h3>
+                    {education.period && (
+                      <span className="shrink-0 rounded-full bg-teal-500/10 px-2.5 py-0.5 text-xs font-medium text-teal-500">
+                        {education.period}
+                      </span>
+                    )}
+                  </div>
+                  {education.degree && (
+                    <p className="mt-1 text-sm font-medium text-teal-500">
+                      {education.degree}
+                    </p>
+                  )}
+                </CardContent>
+              </Card>
+            </motion.div>
+          </div>
+        )}
 
         {/* ── Skills ── */}
-        <div className="mb-14">
-          <SectionHeading icon={Code2} title="Skills" index={3} />
-          <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
-            {TECH_STACK.map((group, i) => (
-              <StackGroup key={group.label} group={group} index={i} />
-            ))}
+        {techStack.length > 0 && (
+          <div className="mb-14">
+            <SectionHeading icon={Code2} title="Skills" index={3} />
+            <div className="grid grid-cols-1 gap-8 sm:grid-cols-2">
+              {techStack.map((group, i) => (
+                <StackGroup key={group.label} group={group} index={i} />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* ── Languages ── */}
-        <div className="mb-14">
-          <SectionHeading icon={Globe} title="Languages" index={4} />
-          <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
-            {LANGUAGES.map((item, i) => (
-              <LanguagePill key={item.language} item={item} index={i} />
-            ))}
+        {languages.length > 0 && (
+          <div className="mb-14">
+            <SectionHeading icon={Globe} title="Languages" index={4} />
+            <div className="grid grid-cols-2 gap-3 sm:grid-cols-4 sm:gap-4">
+              {languages.map((item, i) => (
+                <LanguagePill key={`${item.language}-${i}`} item={item} index={i} />
+              ))}
+            </div>
           </div>
-        </div>
+        )}
 
         {/* ── CTA ── */}
         <motion.div
@@ -403,9 +452,11 @@ export function AboutSection() {
           transition={{ duration: 0.5, ease: "easeOut" }}
           className="rounded-2xl border border-border/60 bg-card/80 p-8 text-center backdrop-blur-sm sm:p-12"
         >
-          <p className="mb-4 text-lg font-medium text-foreground sm:text-xl">
-            {ABOUT.cta}
-          </p>
+          {intro.cta && (
+            <p className="mb-4 text-lg font-medium text-foreground sm:text-xl">
+              {intro.cta}
+            </p>
+          )}
           <div className="flex flex-wrap items-center justify-center gap-3">
             <Button asChild size="lg" className="shadow-lg shadow-primary/20">
               <Link href="/contact">Get in touch</Link>

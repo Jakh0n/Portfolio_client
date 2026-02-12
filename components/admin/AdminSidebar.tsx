@@ -2,7 +2,7 @@
 
 import Link from "next/link";
 import { usePathname, useRouter } from "next/navigation";
-import { FolderOpen, LayoutDashboard, LogOut, Settings } from "lucide-react";
+import { FolderOpen, LayoutDashboard, LogOut, UserCircle } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 /**
@@ -15,7 +15,7 @@ import { cn } from "@/lib/utils";
 const ADMIN_NAV = [
   { href: "/admin", label: "Dashboard", icon: LayoutDashboard },
   { href: "/admin/projects", label: "Projects", icon: FolderOpen },
-  { href: "/admin/settings", label: "Settings", icon: Settings },
+  { href: "/admin/about", label: "About Page", icon: UserCircle },
 ] as const;
 
 interface AdminSidebarProps {

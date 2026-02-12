@@ -2,7 +2,7 @@ import { notFound } from "next/navigation";
 import { Header } from "@/components/Header";
 import { Footer } from "@/components/Footer";
 import { ProjectDetail } from "@/components/ProjectDetail";
-import { getProjectById } from "@/constants/work";
+import { getProjectBySlug } from "@/lib/projects";
 
 interface ProjectPageProps {
   params: Promise<{ id: string }>;
@@ -10,7 +10,7 @@ interface ProjectPageProps {
 
 export default async function ProjectPage({ params }: ProjectPageProps) {
   const { id } = await params;
-  const project = getProjectById(id);
+  const project = await getProjectBySlug(id);
 
   if (!project) {
     notFound();
@@ -29,7 +29,7 @@ export default async function ProjectPage({ params }: ProjectPageProps) {
 
 export async function generateMetadata({ params }: ProjectPageProps) {
   const { id } = await params;
-  const project = getProjectById(id);
+  const project = await getProjectBySlug(id);
   if (!project) return { title: "Project not found" };
   return {
     title: `${project.title} | Work`,

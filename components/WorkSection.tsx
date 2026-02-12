@@ -3,7 +3,17 @@
 import Image from "next/image";
 import Link from "next/link";
 import { motion } from "framer-motion";
-import { WORK_PROJECTS, WORK_ACCENT, type WorkProject } from "@/constants/work";
+import { WORK_ACCENT, type WorkProject } from "@/constants/work";
+
+/**
+ * WorkSection now receives projects as props (fetched on the server).
+ * This keeps the component a client component (for Framer Motion)
+ * while the DATA is fetched server-side (fast, SEO-friendly).
+ */
+
+interface WorkSectionProps {
+  projects: WorkProject[];
+}
 
 function WorkCard({
   project,
@@ -14,7 +24,7 @@ function WorkCard({
   index: number;
   size: "large" | "medium" | "small";
 }) {
-  const accent = WORK_ACCENT[project.category];
+  const accent = WORK_ACCENT[project.category] ?? "#7eb8f7";
 
   return (
     <motion.li
@@ -29,7 +39,7 @@ function WorkCard({
       className={size === "large" ? "col-span-2 row-span-2" : ""}
     >
       <Link
-        href={project.href}
+        href={`/work/${project.slug}`}
         className="group relative flex h-full min-h-[280px] flex-col overflow-hidden rounded-2xl border border-border/50 transition-all duration-500 hover:-translate-y-1 hover:border-transparent hover:shadow-2xl"
       >
         <Image
@@ -49,8 +59,8 @@ function WorkCard({
           aria-hidden
         />
 
-        {/* Card content - hidden on hover */}
-        <div className="relative z-10 flex min-h-0 flex-1 flex-col justify-end p-5 opacity-100 transition-opacity duration-300 group-hover:opacity-0 group-hover:pointer-events-none sm:p-6 lg:p-7">
+        {/* Card content — hidden on hover */}
+        <div className="relative z-10 flex min-h-0 flex-1 flex-col justify-end p-5 opacity-100 transition-opacity duration-300 group-hover:pointer-events-none group-hover:opacity-0 sm:p-6 lg:p-7">
           <div className="space-y-3 sm:space-y-4">
             <div className="flex items-center gap-2.5">
               <span
@@ -70,7 +80,13 @@ function WorkCard({
             </div>
 
             <h3
-              className={`font-bold leading-[1.15] tracking-tight text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)] ${size === "large" ? "text-2xl sm:text-3xl lg:text-4xl" : size === "medium" ? "text-xl sm:text-2xl" : "text-lg sm:text-xl"}`}
+              className={`font-bold leading-[1.15] tracking-tight text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)] ${
+                size === "large"
+                  ? "text-2xl sm:text-3xl lg:text-4xl"
+                  : size === "medium"
+                    ? "text-xl sm:text-2xl"
+                    : "text-lg sm:text-xl"
+              }`}
             >
               {project.title}
             </h3>
@@ -90,12 +106,15 @@ function WorkCard({
           }}
           aria-hidden
         />
-        {/* Hover: full blur overlay, only View more + arrow visible on top */}
+
+        {/* Hover: blur overlay */}
         <div
           className="absolute inset-0 z-20 rounded-2xl bg-black/30 opacity-0 backdrop-blur-md transition-opacity duration-300 group-hover:opacity-100"
           aria-hidden
         />
-        <div className="absolute bottom-4 right-4 z-30 flex items-center gap-3 opacity-0 transition-all duration-300 group-hover:opacity-100 group-hover:translate-x-0 sm:bottom-5 sm:right-5 sm:translate-x-2">
+
+        {/* Hover: view more */}
+        <div className="absolute bottom-4 right-4 z-30 flex items-center gap-3 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100 sm:bottom-5 sm:right-5 sm:translate-x-2">
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-white">
             View more
           </span>
@@ -123,7 +142,32 @@ function WorkCard({
   );
 }
 
-export function WorkSection() {
+/** Assign card sizes based on position: first = large, next 2 = medium, rest = small */
+function getCardSize(index: number): "large" | "medium" | "small" {
+  if (index === 0) return "large";
+  if (index <= 2) return "medium";
+  return "small";
+}
+
+export function WorkSection({ projects }: WorkSectionProps) {
+  if (projects.length === 0) {
+    return (
+      <section
+        id="work"
+        className="relative overflow-hidden border-b border-border/40 bg-linear-to-b from-muted/20 to-background px-4 py-20 sm:px-6 sm:py-24 lg:py-28"
+      >
+        <div className="relative mx-auto max-w-6xl text-center">
+          <h2 className="mb-4 text-3xl font-bold tracking-tight text-foreground sm:text-4xl lg:text-5xl">
+            Recently Finished Works
+          </h2>
+          <p className="text-muted-foreground">
+            Projects coming soon. Stay tuned.
+          </p>
+        </div>
+      </section>
+    );
+  }
+
   return (
     <section
       id="work"
@@ -163,11 +207,14 @@ export function WorkSection() {
           className="grid grid-cols-1 gap-4 sm:grid-cols-2 sm:gap-5 lg:grid-cols-4 lg:grid-rows-2 lg:gap-6"
           role="list"
         >
-          <WorkCard project={WORK_PROJECTS[0]} index={0} size="large" />
-          <WorkCard project={WORK_PROJECTS[1]} index={1} size="medium" />
-          <WorkCard project={WORK_PROJECTS[2]} index={2} size="medium" />
-          <WorkCard project={WORK_PROJECTS[3]} index={3} size="small" />
-          <WorkCard project={WORK_PROJECTS[4]} index={4} size="small" />
+          {projects.map((project, index) => (
+            <WorkCard
+              key={project._id}
+              project={project}
+              index={index}
+              size={getCardSize(index)}
+            />
+          ))}
         </ul>
       </div>
     </section>
