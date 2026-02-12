@@ -5,6 +5,7 @@ import { usePathname } from "next/navigation";
 import { cn } from "@/lib/utils";
 import { NAV_LINKS } from "@/constants/index";
 import { ModeToggle } from "./toggle-mode";
+import Logo from "./logo";
 
 export function Header() {
   const pathname = usePathname();
@@ -16,7 +17,7 @@ export function Header() {
           href="/"
           className="relative font-semibold tracking-tight text-foreground transition-opacity hover:opacity-90 after:absolute after:bottom-0 after:left-0 after:h-0.5 after:w-0 after:bg-primary after:transition-[width] after:duration-200 hover:after:w-full"
         >
-          Jakhon
+          <Logo />
         </Link>
         <nav className="flex items-center gap-1 sm:gap-2" aria-label="Main">
           {NAV_LINKS.map(({ href, label }) => {
