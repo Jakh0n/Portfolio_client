@@ -4,7 +4,6 @@ import { Cormorant_Garamond, Space_Mono } from "next/font/google";
 import "./globals.css";
 import { ChildProps } from "@/types";
 import { ThemeProvider } from "@/components/theme-provider";
-import { baseSiteMetadata } from "@/lib/metadata";
 
 const geistSans = Geist({
   variable: "--font-geist-sans",
@@ -28,7 +27,12 @@ const spaceMono = Space_Mono({
   weight: ["400", "700"],
 });
 
-export const metadata: Metadata = baseSiteMetadata;
+export const metadata: Metadata = {
+  title: "Jakhon Yokubov | Full Stack & Mobile Developer",
+  description:
+    "Full stack and mobile developer—web apps, native apps, and APIs with clean code and thoughtful design.",
+  icons: { icon: "/J.jpeg", apple: "/J.jpeg" },
+};
 
 export default function RootLayout({ children }: ChildProps) {
   return (

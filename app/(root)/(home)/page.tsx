@@ -4,13 +4,6 @@ import { Hero } from "@/components/Hero";
 import { Footer } from "@/components/Footer";
 import { WorkSection } from "@/components/WorkSection";
 import { getFeaturedProjects } from "@/lib/projects";
-import { createPageMetadata } from "@/lib/metadata";
-
-export const metadata = {
-  ...createPageMetadata({
-    pathname: "/",
-  }),
-};
 
 export default async function HomePage() {
   const projects = await getFeaturedProjects();
