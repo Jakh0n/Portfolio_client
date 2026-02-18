@@ -1,11 +1,36 @@
 import Image from "next/image";
 import Link from "next/link";
+import { Fragment } from "react";
 import { ExternalLink, Github } from "lucide-react";
 import { WORK_ACCENT, type WorkProject } from "@/constants/work";
 import { Button } from "@/components/ui/button";
 
 interface ProjectDetailProps {
   project: WorkProject;
+}
+
+/** Renders plain-text description with paragraphs (double newline) and line breaks (single newline). */
+function FormattedDescription({ text }: { text: string }) {
+  if (!text?.trim()) return null;
+  const paragraphs = text.split(/\n\n+/).filter((p) => p.trim());
+  if (paragraphs.length === 0) return null;
+  return (
+    <div className="space-y-4">
+      {paragraphs.map((paragraph, i) => (
+        <p
+          key={i}
+          className="max-w-full wrap-break-word text-base leading-relaxed text-muted-foreground sm:text-lg"
+        >
+          {paragraph.split("\n").map((line, j) => (
+            <Fragment key={j}>
+              {j > 0 && <br />}
+              {line}
+            </Fragment>
+          ))}
+        </p>
+      ))}
+    </div>
+  );
 }
 
 export function ProjectDetail({ project }: ProjectDetailProps) {
@@ -48,9 +73,7 @@ export function ProjectDetail({ project }: ProjectDetailProps) {
         </div>
 
         <div className="min-w-0 space-y-5 sm:space-y-6">
-          <p className="max-w-full wrap-break-word text-base leading-relaxed text-muted-foreground sm:text-lg">
-            {project.description}
-          </p>
+          <FormattedDescription text={project.description} />
 
           {(project.liveUrl || project.githubUrl) && (
             <div className="flex flex-wrap gap-2 sm:gap-3">

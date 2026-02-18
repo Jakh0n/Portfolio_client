@@ -6,12 +6,6 @@ import { motion } from "framer-motion";
 import { cn } from "@/lib/utils";
 import { WORK_ACCENT, type WorkProject } from "@/constants/work";
 
-/**
- * WorkSection now receives projects as props (fetched on the server).
- * This keeps the component a client component (for Framer Motion)
- * while the DATA is fetched server-side (fast, SEO-friendly).
- */
-
 interface WorkSectionProps {
   projects: WorkProject[];
 }
@@ -37,17 +31,14 @@ function WorkCard({
         duration: 0.6,
         ease: "easeOut",
       }}
-      className={
-        size === "large"
-          ? "col-span-2 lg:row-span-2"
-          : ""
-      }
+      className={size === "large" ? "col-span-2 lg:row-span-2" : ""}
     >
       <Link
         href={`/work/${project.slug}`}
         className={cn(
-          "group relative flex h-full min-h-[200px] flex-col overflow-hidden rounded-2xl border border-border/50 transition-all duration-500 hover:-translate-y-1 hover:border-transparent hover:shadow-2xl sm:min-h-[240px] lg:min-h-[280px]",
-          size === "large" && "min-h-[260px] sm:min-h-[300px] lg:min-h-[280px]",
+          "group relative flex h-full min-h-[200px] flex-col overflow-hidden rounded-2xl border border-border/40 shadow-lg shadow-black/5 transition-all duration-500 hover:-translate-y-1.5 hover:border-transparent hover:shadow-2xl hover:shadow-black/10 sm:min-h-[240px] sm:rounded-3xl lg:min-h-[280px] lg:rounded-3xl",
+          size === "large" &&
+            "min-h-[260px] sm:min-h-[300px] sm:shadow-xl sm:shadow-black/10 lg:min-h-[280px]",
         )}
       >
         <Image
@@ -68,7 +59,6 @@ function WorkCard({
           aria-hidden
         />
 
-        {/* Card content — hidden on hover */}
         <div className="relative z-10 flex min-h-0 flex-1 flex-col justify-end p-5 opacity-100 transition-opacity duration-300 group-hover:pointer-events-none group-hover:opacity-0 sm:p-6 lg:p-7">
           <div className="space-y-3 sm:space-y-4">
             <div className="flex items-center gap-2.5">
@@ -89,22 +79,20 @@ function WorkCard({
             </div>
 
             <h3
-              className={`font-bold leading-[1.15] tracking-tight text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)] ${
-                size === "large"
-                  ? "text-2xl sm:text-3xl lg:text-4xl"
-                  : size === "medium"
-                    ? "text-xl sm:text-2xl"
-                    : "text-lg sm:text-xl"
-              }`}
+              className={cn(
+                "font-bold leading-[1.15] tracking-tight text-white drop-shadow-[0_1px_2px_rgba(0,0,0,0.5)]",
+                size === "large" && "text-2xl sm:text-3xl lg:text-4xl",
+                size === "medium" && "text-xl sm:text-2xl",
+                size === "small" && "text-lg sm:text-xl",
+              )}
             >
               {project.title}
             </h3>
           </div>
         </div>
 
-        {/* Hover: corner gradients */}
         <div
-          className="pointer-events-none absolute inset-0 z-20 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100"
+          className="pointer-events-none absolute inset-0 z-20 rounded-2xl opacity-0 transition-opacity duration-300 group-hover:opacity-100 sm:rounded-3xl"
           style={{
             background: `
               radial-gradient(ellipse 80% 50% at 0% 0%, ${accent}40 0%, transparent 50%),
@@ -116,13 +104,11 @@ function WorkCard({
           aria-hidden
         />
 
-        {/* Hover: blur overlay */}
         <div
-          className="absolute inset-0 z-20 rounded-2xl bg-black/30 opacity-0 backdrop-blur-md transition-opacity duration-300 group-hover:opacity-100"
+          className="absolute inset-0 z-20 rounded-2xl bg-black/30 opacity-0 backdrop-blur-md transition-opacity duration-300 group-hover:opacity-100 sm:rounded-3xl"
           aria-hidden
         />
 
-        {/* Hover: view more */}
         <div className="absolute bottom-4 right-4 z-30 flex items-center gap-3 opacity-0 transition-all duration-300 group-hover:translate-x-0 group-hover:opacity-100 sm:bottom-5 sm:right-5 sm:translate-x-2">
           <span className="text-xs font-semibold uppercase tracking-[0.2em] text-white">
             View more
@@ -151,7 +137,6 @@ function WorkCard({
   );
 }
 
-/** Assign card sizes based on position: first = large, next 2 = medium, rest = small */
 function getCardSize(index: number): "large" | "medium" | "small" {
   if (index === 0) return "large";
   if (index <= 2) return "medium";
@@ -213,7 +198,7 @@ export function WorkSection({ projects }: WorkSectionProps) {
         </div>
 
         <ul
-          className="grid grid-cols-2 gap-3 sm:gap-5 lg:grid-cols-4 lg:grid-rows-2 lg:gap-6"
+          className="grid grid-cols-2 gap-4 sm:gap-6 lg:grid-cols-4 lg:grid-rows-2 lg:gap-8"
           role="list"
         >
           {projects.map((project, index) => (
