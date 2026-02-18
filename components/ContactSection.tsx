@@ -25,11 +25,42 @@ export function ContactSection() {
   const [selectedService, setSelectedService] = useState<string>("");
   const [selectedBudget, setSelectedBudget] = useState<string>("");
   const [isSubmitted, setIsSubmitted] = useState(false);
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  function handleSubmit(e: FormEvent<HTMLFormElement>) {
+  async function handleSubmit(e: FormEvent<HTMLFormElement>) {
     e.preventDefault();
-    // TODO: connect to backend API
-    setIsSubmitted(true);
+    setError(null);
+    const form = e.currentTarget;
+    const data = {
+      name: (form.querySelector('[name="name"]') as HTMLInputElement).value.trim(),
+      email: (form.querySelector('[name="email"]') as HTMLInputElement).value.trim(),
+      service: selectedService,
+      budget: selectedBudget,
+      message: (form.querySelector('[name="message"]') as HTMLTextAreaElement).value.trim(),
+    };
+    if (!data.name || !data.email || !data.service || !data.message) {
+      setError("Please fill in all required fields.");
+      return;
+    }
+    setIsSubmitting(true);
+    try {
+      const res = await fetch("/api/contact", {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(data),
+      });
+      const json = (await res.json()) as { error?: string };
+      if (!res.ok) {
+        setError(json.error ?? "Something went wrong. Please try again.");
+        return;
+      }
+      setIsSubmitted(true);
+    } catch {
+      setError("Network error. Please try again.");
+    } finally {
+      setIsSubmitting(false);
+    }
   }
 
   return (
@@ -117,6 +148,11 @@ export function ContactSection() {
               <Card className="relative border-border/60 bg-card/80 backdrop-blur-sm transition-shadow duration-300 group-hover:border-teal-500/30 group-hover:shadow-[0_0_40px_20px_rgba(20,184,166,0.08)]">
                 <CardContent className="p-4 sm:p-8">
                   <form onSubmit={handleSubmit} className="space-y-5 sm:space-y-6">
+                    {error && (
+                      <p className="rounded-lg border border-destructive/50 bg-destructive/10 px-4 py-3 text-sm text-destructive">
+                        {error}
+                      </p>
+                    )}
                     {/* Name & Email */}
                     <div className="grid grid-cols-1 gap-4 sm:grid-cols-2">
                       <div className="space-y-2">
@@ -226,10 +262,11 @@ export function ContactSection() {
                     <Button
                       type="submit"
                       size="lg"
+                      disabled={isSubmitting}
                       className="w-full shadow-lg shadow-primary/20 sm:w-auto"
                     >
                       <Send className="mr-2 h-4 w-4" />
-                      Send message
+                      {isSubmitting ? "Sending…" : "Send message"}
                     </Button>
                   </form>
                 </CardContent>
